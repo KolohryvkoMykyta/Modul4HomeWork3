@@ -1,0 +1,68 @@
+1) Retrieve all information from the Sales.Customer table
+
+SELECT *
+FROM AdventureWorks.Sales.Customer;
+
+2) Retrieve all information from the Sales.Store table sorted by Name in alphabetical order
+
+SELECT *
+FROM AdventureWorks.Sales.Store
+ORDER BY Name;
+
+3) Retrieve all information from the HumanResources.Employee table about ten employees who were born after 1989-09-28
+
+SELECT TOP(10) *
+FROM AdventureWorks.HumanResources.Employee
+WHERE BirthDate > '1989-09-28';
+
+4) Retrieve employees from the HumanResources.Employee table whose last character of LoginID is 0. Output only NationalIDNumber, LoginID, JobTitle. Data must be sorted by JobTitle by kill
+
+SELECT NationalIDNumber, LoginID, JobTitle
+FROM AdventureWorks.HumanResources.Employee
+WHERE LoginID LIKE '%0'
+ORDER BY JobTitle;
+
+5) Retrieve from the Person.Person table all information about records that have been updated in 2008 (ModifiedDate) and MiddleName contains value and Title does not contain a value
+
+SELECT *
+FROM AdventureWorks.Person.Person
+WHERE ModifiedDate BETWEEN '2008-01-01' AND '2008-12-31'
+AND MiddleName IS NOT NULL
+AND Title IS NULL;
+
+6) Display department name (HumanResources.Department.Name) WITHOUT repetition in which there are employees . Use HumanResources.EmployeeDepartmentHistory and HumanResources.Department tables
+
+SELECT d.Name, Count(h.DepartmentID)
+FROM AdventureWorks.HumanResources.Department d
+JOIN AdventureWorks.HumanResources.EmployeeDepartmentHistory h ON d.DepartmentID = h.DepartmentId
+   WHERE h.EndDate IS NULL
+GROUP BY d.Name
+
+7) Group data from Sales.SalesPerson table by TerritoryID and print the amount of CommissionPct if it is greater than 0
+
+SELECT TerritoryID,
+COUNT (DISTINCT CommissionPct) as 'Count'
+FROM AdventureWorks.Sales.SalesPerson
+WHERE CommissionPct > 0
+GROUP BY TerritoryID;
+
+8) Display all employee information (HumanResources.Employee) which have the largest number vacations (HumanResources.Employee.VacationHours)
+
+SELECT *
+FROM AdventureWorks.HumanResources.Employee
+WHERE VacationHours = (SELECT MAX(VacationHours) FROM AdventureWorks.HumanResources.Employee);
+
+9) Display all employee information (HumanResources.Employee) which have a position (HumanResources.Employee.JobTitle) 'Sales Representative' or 'Network Administrator' or 'Network Manager'
+
+SELECT *
+FROM AdventureWorks.HumanResources.Employee
+WHERE JobTitle = 'Sales Representative'
+OR JobTitle = 'Network Administrator'
+OR JobTitle = 'Network Manager';
+
+10) Display all employee information (HumanResources.Employee) and their orders (Purchasing.PurchaseOrderHeader). IF THE EMPLOYEE DOES NOT HAVE ORDERS SHOULD BE DISPLAYED TOO!!!
+
+SELECT *
+FROM AdventureWorks.HumanResources.Employee
+RIGHT JOIN AdventureWorks.Purchasing.PurchaseOrderHeader
+ON AdventureWorks.Purchasing.PurchaseOrderHeader.EmployeeID = AdventureWorks.HumanResources.Employee.BusinessEntityID;
